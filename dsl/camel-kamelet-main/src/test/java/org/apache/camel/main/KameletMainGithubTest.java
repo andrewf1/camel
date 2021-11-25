@@ -14,34 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.camel.processor.intercept;
+package org.apache.camel.main;
 
-import org.apache.camel.builder.RouteBuilder;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
-public class IntercepFromWithPredicateTest extends InterceptFromRouteTestSupport {
+@Disabled("Manual test")
+public class KameletMainGithubTest {
 
-    @Override
-    protected RouteBuilder createRouteBuilder() {
-        return new RouteBuilder() {
-            public void configure() {
-                // intercept with a predicate test
-                interceptFrom().when(header("foo").isEqualTo("bar")).to("mock:b").stop();
+    @Test
+    public void testKameletMain() throws Exception {
+        KameletMain main = new KameletMain();
+        main.setDownload(true);
+        main.configure().withDurationMaxSeconds(10);
+        main.configure().withRoutesIncludePattern("github:apache:camel-k:examples/languages/routes.yaml");
 
-                from("direct:start").to("mock:a");
-            }
-        };
+        main.run();
     }
 
-    @Override
-    protected void prepareMatchingTest() {
-        a.expectedMessageCount(0);
-        b.expectedMessageCount(1);
-    }
+    @Test
+    public void testKameletMainGroovy() throws Exception {
+        KameletMain main = new KameletMain();
+        main.setDownload(true);
+        main.configure().withDurationMaxSeconds(10);
+        main.configure().withRoutesIncludePattern("github:apache:camel-k:examples/languages/simple.groovy");
 
-    @Override
-    protected void prepareNonMatchingTest() {
-        a.expectedMessageCount(1);
-        b.expectedMessageCount(0);
+        main.run();
     }
-
 }
